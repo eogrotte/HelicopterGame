@@ -1,5 +1,8 @@
 package com.example.even.helicoptergame;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 
 import sheep.game.Sprite;
@@ -32,7 +35,8 @@ public class TitleScreen extends State  {
         westWall = new Sprite(wallVerImage);
         westWall.setPosition(4, 215);
         aSprite.setPosition(200, 120);
-        aSprite.setSpeed(40, 0); // it should move right direction, but since collides bug, it will move (-40,0),  If we input (-40,0), it move (40,0), after collides, helicopter is disappeared. bug?
+        aSprite.setSpeed(40, 0); // it should move right direction, but since collides bug, it will move (-40,0),
+                                // If we input (-40,0), it move (40,0), after collides, helicopter is disappeared. bug?
         heliSprite.setPosition(40, 120);
         heliSprite.setSpeed(40, 0);
         this.addTouchListener(new TouchListener() {
@@ -42,14 +46,15 @@ public class TitleScreen extends State  {
                 float trykkY=motionEvent.getY();
 
                 float helicopterX=heliSprite.getX();
-                System.out.println(helicopterX);
                 float helicopterY=heliSprite.getY();
-                System.out.println(helicopterY);
 
-                float xSpeed=trykkX-helicopterX;
-                float ySpeed=trykkY-helicopterY;
+                if (trykkX>helicopterX){
+                    aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
+                }
+                else{
+                    aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
 
-                heliSprite.setSpeed(xSpeed, ySpeed);
+                }
 
 
                 return true;
@@ -58,17 +63,17 @@ public class TitleScreen extends State  {
             @Override
             public boolean onTouchUp(MotionEvent motionEvent) {
 
-                float trykkX=motionEvent.getX();
-                float trykkY=motionEvent.getY();
-
-                float helicopterX=heliSprite.getX();
-                System.out.println(helicopterX);
-                float helicopterY=heliSprite.getY();
-                System.out.println(helicopterY);
-
-                float xSpeed=trykkX-helicopterX;
-                float ySpeed=trykkY-helicopterY;
-                return false;
+//                float trykkX=motionEvent.getX();
+//                float trykkY=motionEvent.getY();
+//
+//                float helicopterX=heliSprite.getX();
+//                System.out.println(helicopterX);
+//                float helicopterY=heliSprite.getY();
+//                System.out.println(helicopterY);
+//
+//                float xSpeed=trykkX-helicopterX;
+//                float ySpeed=trykkY-helicopterY;
+             return false;
             }
 
             @Override
@@ -101,7 +106,8 @@ public class TitleScreen extends State  {
             aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
         }
 
-        else if(aSprite.collides(heliSprite)) // This collides is judged since the above collides. First execution collides will be true at the first time without any judge.
+        else if(aSprite.collides(heliSprite)) // This collides is judged since the above collides.
+        // First execution collides will be true at the first time without any judge.
         {
             System.out.println("crash each other!");
             aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
