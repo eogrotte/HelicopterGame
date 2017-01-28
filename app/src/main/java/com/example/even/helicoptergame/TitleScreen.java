@@ -19,6 +19,7 @@ public class TitleScreen extends State  {
 
     private Image aImage = new Image(R.drawable.icon);
     private Image heliImage = new Image(R.drawable.heli1_east);
+    private Image heliWest = new Image(R.drawable.heli1);
     private Image wallVerImage = new Image(R.drawable.wall_vertical);
     private Image backgroundImage = new Image(R.drawable.background);
     private Sprite aSprite;
@@ -51,10 +52,12 @@ public class TitleScreen extends State  {
                 //28.01.17: Switched to heliSprite instead of aSprite.
                 //This if shall change the direction of the heli to go in the direction of the touchEvent
                 if (trykkX>helicopterX){
-                    aSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+                    heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+                    heliSprite= new Sprite (heliWest);
                 }
                 else{
-                    aSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+                    heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+                    heliSprite= new Sprite (heliImage);
 
                 }
 
