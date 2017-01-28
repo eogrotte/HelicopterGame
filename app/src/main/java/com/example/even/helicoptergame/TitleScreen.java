@@ -17,8 +17,8 @@ import sheep.input.TouchListener;
 
 public class TitleScreen extends State  {
 
-    private Image heliImage = new Image(R.drawable.icon);
-    private Image aImage = new Image(R.drawable.heli1_east);
+    private Image aImage = new Image(R.drawable.icon);
+    private Image heliImage = new Image(R.drawable.heli1_east);
     private Image wallVerImage = new Image(R.drawable.wall_vertical);
     private Image backgroundImage = new Image(R.drawable.background);
     private Sprite aSprite;
@@ -34,10 +34,10 @@ public class TitleScreen extends State  {
         aSprite = new Sprite(aImage);
         westWall = new Sprite(wallVerImage);
         westWall.setPosition(4, 215);
-        aSprite.setPosition(200, 120);
-        aSprite.setSpeed(40, 0); // it should move right direction, but since collides bug, it will move (-40,0),
+       // aSprite.setPosition(200, 120);
+       // aSprite.setSpeed(40, 0); // it should move right direction, but since collides bug, it will move (-40,0),
                                 // If we input (-40,0), it move (40,0), after collides, helicopter is disappeared. bug?
-        heliSprite.setPosition(40, 120);
+        heliSprite.setPosition(200, 120);
         heliSprite.setSpeed(40, 0);
         this.addTouchListener(new TouchListener() {
             @Override
@@ -63,16 +63,6 @@ public class TitleScreen extends State  {
             @Override
             public boolean onTouchUp(MotionEvent motionEvent) {
 
-//                float trykkX=motionEvent.getX();
-//                float trykkY=motionEvent.getY();
-//
-//                float helicopterX=heliSprite.getX();
-//                System.out.println(helicopterX);
-//                float helicopterY=heliSprite.getY();
-//                System.out.println(helicopterY);
-//
-//                float xSpeed=trykkX-helicopterX;
-//                float ySpeed=trykkY-helicopterY;
              return false;
             }
 
@@ -92,18 +82,21 @@ public class TitleScreen extends State  {
         heliSprite.draw(canvas);
     }
 
+
+    //Har nå skiftet ut alle "asprite" med heliSprite, for å fjerne aSPrite-dritten.
+    //Denne utskiftingen gjelder de først 2 if-ene
     public void update(float dt) {
 
-        if(aSprite.getX()>=256)
+        if(heliSprite.getX()>=256)
         {
             System.out.println("crash east border!");
-            aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
+            heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
         }
 
-        else if(aSprite.collides(westWall)) // collides is true first time, and change the object direction.
+        else if(heliSprite.collides(westWall)) // collides is true first time, and change the object direction.
         {
             System.out.println("crash west border!");
-            aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
+            heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
         }
 
         else if(aSprite.collides(heliSprite)) // This collides is judged since the above collides.
