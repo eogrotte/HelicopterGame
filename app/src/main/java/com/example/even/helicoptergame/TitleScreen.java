@@ -48,11 +48,13 @@ public class TitleScreen extends State  {
                 float helicopterX=heliSprite.getX();
                 float helicopterY=heliSprite.getY();
 
+                //28.01.17: Switched to heliSprite instead of aSprite.
+                //This if shall change the direction of the heli to go in the direction of the touchEvent
                 if (trykkX>helicopterX){
-                    aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
+                    aSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
                 }
                 else{
-                    aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
+                    aSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
 
                 }
 
@@ -78,7 +80,7 @@ public class TitleScreen extends State  {
         backSprite.draw(canvas);
 
         westWall.draw(canvas);
-        aSprite.draw(canvas);
+        //aSprite.draw(canvas);
         heliSprite.draw(canvas);
     }
 
@@ -87,7 +89,7 @@ public class TitleScreen extends State  {
     //Denne utskiftingen gjelder de først 2 if-ene
     public void update(float dt) {
 
-        if(heliSprite.getX()>=256)
+        if(heliSprite.getX()>=255)
         {
             System.out.println("crash east border!");
             heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
@@ -99,15 +101,15 @@ public class TitleScreen extends State  {
             heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
         }
 
-        else if(aSprite.collides(heliSprite)) // This collides is judged since the above collides.
-        // First execution collides will be true at the first time without any judge.
-        {
-            System.out.println("crash each other!");
-            aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
-            heliSprite.setScale(-1, 1);
-            heliSprite.setPosition(heliSprite.getPosition().getX() + heliImage.getWidth(), heliSprite.getPosition().getY());
-            heliSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
-        }
+//        else if(aSprite.collides(heliSprite)) // This collides is judged since the above collides.
+//        // First execution collides will be true at the first time without any judge.
+//        {
+//            System.out.println("crash each other!");
+//            aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
+//            heliSprite.setScale(-1, 1);
+//            heliSprite.setPosition(heliSprite.getPosition().getX() + heliImage.getWidth(), heliSprite.getPosition().getY());
+//            heliSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
+//        }
 
         if(heliSprite.getX()>=300)
         {
