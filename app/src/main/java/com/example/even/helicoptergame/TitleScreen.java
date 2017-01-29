@@ -24,6 +24,7 @@ public class TitleScreen extends State  {
     private Image wallVerImage = new Image(R.drawable.wall_vertical);
     private Image backgroundImage = new Image(R.drawable.background);
     private Sprite aSprite;
+    private Sprite secondSprite;
     private Sprite westWall;
     private Sprite backSprite;
     private Sprite heliSprite;
@@ -34,11 +35,16 @@ public class TitleScreen extends State  {
         backSprite = new Sprite(backgroundImage);
         heliSprite = new Sprite(heliImage);
         aSprite = new Sprite(aImage);
+        secondSprite = new Sprite (aImage);
         westWall = new Sprite(wallVerImage);
         westWall.setPosition(4, 215);
-       // aSprite.setPosition(200, 120);
-       // aSprite.setSpeed(40, 0); // it should move right direction, but since collides bug, it will move (-40,0),
-                                // If we input (-40,0), it move (40,0), after collides, helicopter is disappeared. bug?
+
+        aSprite.setPosition(60, 60);
+        aSprite.setSpeed((float)Math.random()*(-100), (float)Math.random()*(-100));
+
+        secondSprite.setPosition(200, 200);
+        secondSprite.setSpeed(40, 0);
+
         heliSprite.setPosition(200, 120);
         heliSprite.setSpeed(40, 0);
         this.addTouchListener(new TouchListener() {
@@ -55,7 +61,6 @@ public class TitleScreen extends State  {
 
 
 
-                //28.01.17: Switched to heliSprite instead of aSprite.
                 //This if shall change the direction of the heli to go in the direction of the touchEvent
                 if (deltaX<0 && Math.abs(deltaX)>Math.abs(deltaY)){
 //                    heliSprite.setScale(-1,1);
@@ -97,7 +102,8 @@ public class TitleScreen extends State  {
         backSprite.draw(canvas);
 
         westWall.draw(canvas);
-        //aSprite.draw(canvas);
+        aSprite.draw(canvas);
+        secondSprite.draw(canvas);
         heliSprite.draw(canvas);
         //Setter inn informasjon om helikopterets koordinater
         //Må først finne x og y-koordinatene:
@@ -120,10 +126,10 @@ public class TitleScreen extends State  {
     //Denne utskiftingen gjelder de først 2 if-ene
     public void update(float dt) {
 
-        if(heliSprite.getX()>=255)
+        if(heliSprite.getX()>=254)
         {
             System.out.println("crash east border!");
-            heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+            heliSprite.setSpeed(-40, 0);
         }
 
         else if(heliSprite.collides(westWall)) // collides is true first time, and change the object direction.
@@ -132,13 +138,7 @@ public class TitleScreen extends State  {
             heliSprite.setSpeed(40, 0);
         }
 
-        if(heliSprite.getX()>=300)
-        {
-            System.out.println("crash east border!");
-            heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
-        }
-
-        if (heliSprite.getY()<20){
+        if (heliSprite.getY()<25){
             System.out.println("Crash north border!");
             heliSprite.setSpeed(0, 40);
         }
@@ -148,6 +148,109 @@ public class TitleScreen extends State  {
             heliSprite.setSpeed(0, -40);
         }
 
+        //"Borders" for aSprite/AI
+
+        if(aSprite.getX()>=285)
+        {
+            System.out.println("crash east border!");
+            aSprite.setSpeed(-(float)Math.random()*(100), aSprite.getSpeed().getY());
+        }
+
+        else if(aSprite.collides(westWall)) // collides is true first time, and change the object direction.
+        {
+            System.out.println("crash west border!");
+            aSprite.setSpeed((float)Math.random()*(100), aSprite.getSpeed().getY());
+        }
+
+        if (aSprite.getY()<20){
+            System.out.println("Crash north border!");
+            aSprite.setSpeed(aSprite.getSpeed().getX(), (float)Math.random()*(100));
+        }
+
+        if (aSprite.getY()> 400){
+            System.out.println("Crash southern border! Must build wall!");
+            aSprite.setSpeed(aSprite.getSpeed().getX(), (float)Math.random()*(-100));
+        }
+
+         if(heliSprite.collides(aSprite)) {
+            System.out.println("crash each other!");
+            if (heliSprite.getSpeed().getX()>1){
+                aSprite.setSpeed((float)Math.random()*(-120), aSprite.getSpeed().getY());
+
+            }
+            else{
+                aSprite.setSpeed(aSprite.getSpeed().getX(), (float)Math.random()*(-100));
+
+            }
+            heliSprite.setSpeed(heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+        }
+
+        else if(aSprite.collides(heliSprite)) {
+            System.out.println("crash each other!");
+            if (heliSprite.getSpeed().getX()>1){
+                aSprite.setSpeed((float)Math.random()*(-120), aSprite.getSpeed().getY());
+
+            }
+            else{
+                aSprite.setSpeed(aSprite.getSpeed().getX(), (float)Math.random()*(-100));
+
+            }
+            heliSprite.setSpeed(heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+        }
+
+        //borders for seondSprite
+
+        if(secondSprite.getX()>=290)
+        {
+            System.out.println("crash east border!");
+            secondSprite.setSpeed(-(float)Math.random()*(100), secondSprite.getSpeed().getY());
+        }
+
+        else if(secondSprite.collides(westWall)) // collides is true first time, and change the object direction.
+        {
+            System.out.println("crash west border!");
+            secondSprite.setSpeed((float)Math.random()*(100), secondSprite.getSpeed().getY());
+        }
+
+        if (secondSprite.getY()<20){
+            System.out.println("Crash north border!");
+            secondSprite.setSpeed(secondSprite.getSpeed().getX(), (float)Math.random()*(100));
+        }
+
+        if (secondSprite.getY()> 400){
+            System.out.println("Crash southern border! Must build wall!");
+            secondSprite.setSpeed(aSprite.getSpeed().getX(), (float)Math.random()*(-100));
+        }
+
+        if(secondSprite.collides(aSprite)) {
+            System.out.println("crash each other!");
+            if (aSprite.getSpeed().getX()>aSprite.getSpeed().getY()){
+                secondSprite.setSpeed((float)Math.random()*(-120), secondSprite.getSpeed().getY());
+                aSprite.setSpeed((float)Math.random()*(-120), secondSprite.getSpeed().getY());
+
+            }
+            else{
+                aSprite.setSpeed(aSprite.getSpeed().getX(), (float)Math.random()*(-100));
+                secondSprite.setSpeed( secondSprite.getSpeed().getY(), (float)Math.random()*(-100));
+
+            }
+            heliSprite.setSpeed(heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+        }
+
+        else if(secondSprite.collides(heliSprite)) // This collides is judged since the above collides.
+        // First execution collides will be true at the first time without any judge.
+        {
+            System.out.println("crash each other!");
+            if (heliSprite.getSpeed().getX()>1){
+                secondSprite.setSpeed((float)Math.random()*(-120), secondSprite.getSpeed().getY());
+
+            }
+            else{
+                secondSprite.setSpeed(secondSprite.getSpeed().getX(), (float)Math.random()*(-100));
+
+            }
+            heliSprite.setSpeed(heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+        }
 
 
         westWall.update(dt);
