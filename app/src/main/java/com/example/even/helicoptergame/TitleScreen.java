@@ -3,6 +3,7 @@ package com.example.even.helicoptergame;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.icu.text.DecimalFormat;
 import android.view.MotionEvent;
 
 import sheep.game.Sprite;
@@ -49,16 +50,29 @@ public class TitleScreen extends State  {
                 float helicopterX=heliSprite.getX();
                 float helicopterY=heliSprite.getY();
 
+                float deltaX=helicopterX-trykkX;
+                float deltaY=helicopterY-trykkY;
+
+
+
                 //28.01.17: Switched to heliSprite instead of aSprite.
                 //This if shall change the direction of the heli to go in the direction of the touchEvent
-                if (trykkX>helicopterX){
-                    heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
-                    heliSprite= new Sprite (heliWest);
+                if (deltaX<0 && Math.abs(deltaX)>Math.abs(deltaY)){
+//                    heliSprite.setScale(-1,1);
+//                    heliSprite.setPosition(helicopterX+130, helicopterY);
+                    heliSprite.setSpeed(40, 0);
                 }
-                else{
-                    heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
-                    heliSprite= new Sprite (heliImage);
+                if (deltaX>0 && Math.abs(deltaX)>Math.abs(deltaY)){
+//                    heliSprite.setScale(-1,1);
+//                    heliSprite.setPosition(helicopterX-130, helicopterY);
+                    heliSprite.setSpeed(-40, 0);
 
+                }
+                if (deltaY>0 && Math.abs(deltaY)>Math.abs(deltaX)){
+                    heliSprite.setSpeed(0, -40);
+                }
+                if (deltaY<0 && Math.abs(deltaY)>Math.abs(deltaX)){
+                    heliSprite.setSpeed(0, 40);
                 }
 
 
@@ -85,6 +99,20 @@ public class TitleScreen extends State  {
         westWall.draw(canvas);
         //aSprite.draw(canvas);
         heliSprite.draw(canvas);
+        //Setter inn informasjon om helikopterets koordinater
+        //Må først finne x og y-koordinatene:
+
+        float heliXCoord=heliSprite.getX();
+        float heliYCoord=heliSprite.getY();
+
+
+        String CoordString = Float.toString(heliXCoord) + " " + Float.toString(heliYCoord);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLUE);
+        paint.setTextSize(15);
+        canvas.drawText(CoordString, 20, 20, paint);
+
     }
 
 
@@ -101,24 +129,26 @@ public class TitleScreen extends State  {
         else if(heliSprite.collides(westWall)) // collides is true first time, and change the object direction.
         {
             System.out.println("crash west border!");
-            heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+            heliSprite.setSpeed(40, 0);
         }
-
-//        else if(aSprite.collides(heliSprite)) // This collides is judged since the above collides.
-//        // First execution collides will be true at the first time without any judge.
-//        {
-//            System.out.println("crash each other!");
-//            aSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
-//            heliSprite.setScale(-1, 1);
-//            heliSprite.setPosition(heliSprite.getPosition().getX() + heliImage.getWidth(), heliSprite.getPosition().getY());
-//            heliSprite.setSpeed(-aSprite.getSpeed().getX(), aSprite.getSpeed().getY());
-//        }
 
         if(heliSprite.getX()>=300)
         {
             System.out.println("crash east border!");
             heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
         }
+
+        if (heliSprite.getY()<20){
+            System.out.println("Crash north border!");
+            heliSprite.setSpeed(0, 40);
+        }
+
+        if (heliSprite.getY()> 400){
+            System.out.println("Crash southern border! Must build wall!");
+            heliSprite.setSpeed(0, -40);
+        }
+
+
 
         westWall.update(dt);
         aSprite.update(dt);
