@@ -42,8 +42,8 @@ public class TitleScreen extends State  {
         aSprite.setPosition(60, 60);
         aSprite.setSpeed((float)Math.random()*(-100), (float)Math.random()*(-100));
 
-        secondSprite.setPosition(200, 200);
-        secondSprite.setSpeed(40, 0);
+        secondSprite.setPosition(60, 300);
+        secondSprite.setSpeed((float)Math.random()*(-100), (float)Math.random()*(-100));
 
         heliSprite.setPosition(200, 120);
         heliSprite.setSpeed(40, 0);
@@ -200,7 +200,7 @@ public class TitleScreen extends State  {
 
         //borders for seondSprite
 
-        if(secondSprite.getX()>=290)
+        if(secondSprite.getX()>=300)
         {
             System.out.println("crash east border!");
             secondSprite.setSpeed(-(float)Math.random()*(100), secondSprite.getSpeed().getY());
@@ -214,7 +214,7 @@ public class TitleScreen extends State  {
 
         if (secondSprite.getY()<20){
             System.out.println("Crash north border!");
-            secondSprite.setSpeed(secondSprite.getSpeed().getX(), (float)Math.random()*(100));
+            secondSprite.setSpeed(secondSprite.getSpeed().getX(), -(float)Math.random()*(100));
         }
 
         if (secondSprite.getY()> 400){
@@ -225,8 +225,8 @@ public class TitleScreen extends State  {
         if(secondSprite.collides(aSprite)) {
             System.out.println("crash each other!");
             if (aSprite.getSpeed().getX()>aSprite.getSpeed().getY()){
-                secondSprite.setSpeed((float)Math.random()*(-120), secondSprite.getSpeed().getY());
-                aSprite.setSpeed((float)Math.random()*(-120), secondSprite.getSpeed().getY());
+                secondSprite.setSpeed((float)Math.random()*(-120), -secondSprite.getSpeed().getY());
+                aSprite.setSpeed((float)Math.random()*(-120), -secondSprite.getSpeed().getY());
 
             }
             else{
@@ -237,7 +237,7 @@ public class TitleScreen extends State  {
             heliSprite.setSpeed(heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
         }
 
-        else if(secondSprite.collides(heliSprite)) // This collides is judged since the above collides.
+        if(secondSprite.collides(heliSprite)) // This collides is judged since the above collides.
         // First execution collides will be true at the first time without any judge.
         {
             System.out.println("crash each other!");
@@ -255,6 +255,7 @@ public class TitleScreen extends State  {
 
         westWall.update(dt);
         aSprite.update(dt);
+        secondSprite.update(dt);
         heliSprite.update(dt);
 
     }
