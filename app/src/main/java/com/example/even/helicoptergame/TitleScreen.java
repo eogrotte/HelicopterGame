@@ -16,7 +16,7 @@ import sheep.input.TouchListener;
  * Created by Even on 26.01.2017.
  */
 
-public class TitleScreen extends State  {
+public final class TitleScreen extends State  {
 
     private Image aImage = new Image(R.drawable.icon);
     private Image heliImage = new Image(R.drawable.heli1_east);
@@ -29,9 +29,11 @@ public class TitleScreen extends State  {
     private Sprite backSprite;
     private Sprite heliSprite;
 
+    private static final TitleScreen INSTANCE = new TitleScreen();
 
 
-    public TitleScreen() {
+
+    private TitleScreen() {
         backSprite = new Sprite(backgroundImage);
         heliSprite = new Sprite(heliImage);
         aSprite = new Sprite(aImage);
@@ -96,6 +98,10 @@ public class TitleScreen extends State  {
             }
         });
 
+    }
+
+    public static TitleScreen getInstance(){
+        return INSTANCE;
     }
 
     public void draw(android.graphics.Canvas canvas){
